@@ -75,6 +75,27 @@ ColumnLayout {
     stderr: StdioCollector {}
   }
 
+  Process {
+    id: wallustCheck
+    command: ["which", "wallust"]
+    running: false
+
+    onExited: function (exitCode) {
+      if (exitCode === 0) {
+        // Matugen exists, enable it
+        Settings.data.colorSchemes.useWallpaperColors = true
+        WallustService.generateFromWallpaper()
+        ToastService.showNotice("Wallust", "Enabled")
+      } else {
+        // Matugen not found
+        ToastService.showWarning("Wallust", "Not installed")
+      }
+    }
+
+    stdout: StdioCollector {}
+    stderr: StdioCollector {}
+  }
+
   // A non-visual Item to host the Repeater that loads the color scheme files.
   Item {
     visible: false
@@ -145,6 +166,27 @@ ColumnLayout {
                    }
       }
 
+      // Use Wallust
+      NToggle {
+        label: "Enable Wallust"
+        description: "Automatically generate colors based on your active wallpaper."
+        checked: Settings.data.colorSchemes.useWallpaperColors
+        onToggled: checked => {
+                     if (checked) {
+                       // Check if wallustis installed
+                       wallustCheck.running = true
+                     } else {
+                       Settings.data.colorSchemes.useWallpaperColors = false
+                       ToastService.showNotice("Wallust", "Disabled")
+
+                       if (Settings.data.colorSchemes.predefinedScheme) {
+
+                         ColorSchemeService.applyScheme(Settings.data.colorSchemes.predefinedScheme)
+                       }
+                     }
+                   }
+      }
+
       NDivider {
         Layout.fillWidth: true
         Layout.topMargin: Style.marginXL * scaling
@@ -202,6 +244,7 @@ ColumnLayout {
                 // Disable useWallpaperColors when picking a predefined color scheme
                 Settings.data.colorSchemes.useWallpaperColors = false
                 Logger.log("ColorSchemeTab", "Disabled matugen setting")
+                Logger.log("ColorSchemeTab", "Disabled wallust setting")
 
                 Settings.data.colorSchemes.predefinedScheme = schemePath
                 ColorSchemeService.applyScheme(schemePath)
@@ -475,6 +518,148 @@ ColumnLayout {
                    Settings.data.matugen.enableUserTemplates = checked
                    if (Settings.data.colorSchemes.useWallpaperColors)
                    MatugenService.generateFromWallpaper()
+                 }
+    }
+  }
+  // wallust template toggles (moved from wallustTab)
+  ColumnLayout {
+    spacing: Style.marginL * scaling
+    Layout.fillWidth: true
+    visible: Settings.data.colorSchemes.useWallpaperColors
+
+    ColumnLayout {
+      spacing: Style.marginS * scaling
+      Layout.fillWidth: true
+
+      NText {
+        text: "wallust Templates"
+        font.pointSize: Style.fontSizeXXL * scaling
+        font.weight: Style.fontWeightBold
+        color: Color.mSecondary
+      }
+
+      NText {
+        text: "Select which external components wallust should apply theming to."
+        font.pointSize: Style.fontSizeM * scaling
+        color: Color.mOnSurfaceVariant
+        Layout.fillWidth: true
+        wrapMode: Text.WordWrap
+      }
+    }
+
+    NCheckbox {
+      label: "GTK 4 (libadwaita)"
+      description: "Write ~/.config/gtk-4.0/gtk.css"
+      checked: Settings.data.wallust.gtk4
+      onToggled: checked => {
+                   Settings.data.wallust.gtk4 = checked
+                   if (Settings.data.colorSchemes.useWallpaperColors)
+                   WallustService.generateFromWallpaper()
+                 }
+    }
+
+    NCheckbox {
+      label: "GTK 3"
+      description: "Write ~/.config/gtk-3.0/gtk.css"
+      checked: Settings.data.wallust.gtk3
+      onToggled: checked => {
+                   Settings.data.wallust.gtk3 = checked
+                   if (Settings.data.colorSchemes.useWallpaperColors)
+                   WallustService.generateFromWallpaper()
+                 }
+    }
+
+    NCheckbox {
+      label: "Qt6ct"
+      description: "Write ~/.config/qt6ct/colors/noctalia.conf"
+      checked: Settings.data.wallust.qt6
+      onToggled: checked => {
+                   Settings.data.wallust.qt6 = checked
+                   if (Settings.data.colorSchemes.useWallpaperColors)
+                   WallustService.generateFromWallpaper()
+                 }
+    }
+
+    NCheckbox {
+      label: "Qt5ct"
+      description: "Write ~/.config/qt5ct/colors/noctalia.conf"
+      checked: Settings.data.wallust.qt5
+      onToggled: checked => {
+                   Settings.data.wallust.qt5 = checked
+                   if (Settings.data.colorSchemes.useWallpaperColors)
+                   WallustService.generateFromWallpaper()
+                 }
+    }
+
+    NCheckbox {
+      label: "Kitty"
+      description: "Write ~/.config/kitty/themes/noctalia.conf and reload"
+      checked: Settings.data.wallust.kitty
+      onToggled: checked => {
+                   Settings.data.wallust.kitty = checked
+                   if (Settings.data.colorSchemes.useWallpaperColors)
+                   WallustService.generateFromWallpaper()
+                 }
+    }
+
+    NCheckbox {
+      label: "Ghostty"
+      description: "Write ~/.config/ghostty/themes/noctalia and reload"
+      checked: Settings.data.wallust.ghostty
+      onToggled: checked => {
+                   Settings.data.wallust.ghostty = checked
+                   if (Settings.data.colorSchemes.useWallpaperColors)
+                   WallustService.generateFromWallpaper()
+                 }
+    }
+
+    NCheckbox {
+      label: "Foot"
+      description: "Write ~/.config/foot/themes/noctalia and reload"
+      checked: Settings.data.wallust.foot
+      onToggled: checked => {
+                   Settings.data.wallust.foot = checked
+                   if (Settings.data.colorSchemes.useWallpaperColors)
+                   WallustService.generateFromWallpaper()
+                 }
+    }
+
+    NCheckbox {
+      label: "Fuzzel"
+      description: "Write ~/.config/fuzzel/themes/noctalia and reload"
+      checked: Settings.data.wallust.fuzzel
+      onToggled: checked => {
+                   Settings.data.wallust.fuzzel = checked
+                   if (Settings.data.colorSchemes.useWallpaperColors)
+                   WallustService.generateFromWallpaper()
+                 }
+    }
+
+    NCheckbox {
+      label: "Vesktop"
+      description: "Write ~/.config/vesktop/themes/noctalia.theme.css"
+      checked: Settings.data.wallust.vesktop
+      onToggled: checked => {
+                   Settings.data.wallust.vesktop = checked
+                   if (Settings.data.colorSchemes.useWallpaperColors)
+                   WallustService.generateFromWallpaper()
+                 }
+    }
+
+    NDivider {
+      Layout.fillWidth: true
+      Layout.topMargin: Style.marginM * scaling
+      Layout.bottomMargin: Style.marginM * scaling
+    }
+
+    NCheckbox {
+      label: "User Templates"
+      description: "Enable user-defined wallust config from ~/.config/wallust/config.toml"
+      checked: Settings.data.wallust.enableUserTemplates
+      onToggled: checked => {
+                   Settings.data.wallust.enableUserTemplates = checked
+                   if (Settings.data.colorSchemes.useWallpaperColors)
+                   WallustService.generateFromWallpaper()
                  }
     }
   }

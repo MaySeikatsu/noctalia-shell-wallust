@@ -108,6 +108,9 @@ Singleton {
         // Kickoff Matugen service
         MatugenService.init()
 
+        // Kickoff Wallust service
+        WallustService.init()
+
         // Kickoff Font service
         FontService.init()
 
@@ -133,7 +136,7 @@ Singleton {
         property bool showNetworkStats: false
         property real backgroundOpacity: 1.0
         property bool useDistroLogo: false
-        property string showWorkspaceLabel: "none"
+        property string showWorkspaceLabel: "name"
         property list<string> monitors: []
 
         // Widget configuration for modular bar system
@@ -149,10 +152,10 @@ Singleton {
       property JsonObject general: JsonObject {
         property string avatarImage: defaultAvatar
         property bool dimDesktop: false
-        property bool showScreenCorners: false
+        property bool showScreenCorners: true
         property real radiusRatio: 1.0
         // Animation speed multiplier (0.1x - 2.0x)
-        property real animationSpeed: 1.0
+        property real animationSpeed: 0.8
       }
 
       // location
@@ -196,7 +199,7 @@ Singleton {
       // applauncher
       property JsonObject appLauncher: JsonObject {
         // When disabled, Launcher hides clipboard command and ignores cliphist
-        property bool enableClipboardHistory: false
+        property bool enableClipboardHistory: true 
         // Position: center, top_left, top_right, bottom_left, bottom_right, bottom_center, top_center
         property string position: "center"
         property real backgroundOpacity: 1.0
@@ -256,6 +259,22 @@ Singleton {
       // matugen templates toggles
       property JsonObject matugen: JsonObject {
         // Per-template flags to control dynamic config generation
+        property bool gtk4: false
+        property bool gtk3: false
+        property bool qt6: false
+        property bool qt5: false
+        property bool kitty: false
+        property bool ghostty: false
+        property bool foot: false
+        property bool fuzzel: false
+        property bool vesktop: false
+        property bool enableUserTemplates: false
+      }
+
+      // wallust templates toggles
+      property JsonObject wallust: JsonObject {
+        // Per-template flags to control dynamic config generation
+        // REPLACE WITH ACTUAL TEMPLATES
         property bool gtk4: false
         property bool gtk3: false
         property bool qt6: false
