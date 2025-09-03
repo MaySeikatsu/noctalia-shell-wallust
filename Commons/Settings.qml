@@ -149,10 +149,10 @@ Singleton {
       property JsonObject general: JsonObject {
         property string avatarImage: defaultAvatar
         property bool dimDesktop: false
-        property bool showScreenCorners: false
+        property bool showScreenCorners: true
         property real radiusRatio: 1.0
         // Animation speed multiplier (0.1x - 2.0x)
-        property real animationSpeed: 1.0
+        property real animationSpeed: 0.8
       }
 
       // location
@@ -196,7 +196,7 @@ Singleton {
       // applauncher
       property JsonObject appLauncher: JsonObject {
         // When disabled, Launcher hides clipboard command and ignores cliphist
-        property bool enableClipboardHistory: false
+        property bool enableClipboardHistory: true
         // Position: center, top_left, top_right, bottom_left, bottom_right, bottom_center, top_center
         property string position: "center"
         property real backgroundOpacity: 1.0
@@ -223,11 +223,11 @@ Singleton {
 
       // audio
       property JsonObject audio: JsonObject {
-        property bool showMiniplayerAlbumArt: false
-        property bool showMiniplayerCava: false
+        property bool showMiniplayerAlbumArt: true
+        property bool showMiniplayerCava: true
         property string visualizerType: "linear"
         property int volumeStep: 5
-        property int cavaFrameRate: 60
+        property int cavaFrameRate: 90
         // MPRIS controls
         property list<string> mprisBlacklist: []
         property string preferredPlayer: ""
@@ -248,8 +248,8 @@ Singleton {
       }
 
       property JsonObject colorSchemes: JsonObject {
-        property bool useWallpaperColors: false
-        property string predefinedScheme: ""
+        property bool useWallpaperColors: true
+        property string predefinedScheme: "RosePine"
         property bool darkMode: true
       }
 
